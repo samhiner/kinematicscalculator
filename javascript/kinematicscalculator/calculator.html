@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
+	<script src="https://chrispahm.github.io/chartjs-plugin-dragData/assets/chartjs-plugin-dragData.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Lily+Script+One|Oxygen" rel="stylesheet">
+	<link rel='stylesheet' type='text/css' href='calculatorstyle.css'>
+</head>
+<body>
+	<div class='allGraphs'>
+		<div class='graphHolder'>
+			<h1>Position</h1>
+		<canvas id='position'></canvas>
+		</div>
+		<div class='graphHolder'>
+			<h1>Velocity</h1>
+			<canvas id='velocity'></canvas>
+		</div>
+		<div class='graphHolder' style='border-width: 0px;'>
+			<h1>Acceleration</h1>
+			<canvas id='acceleration'></canvas>
+		</div>
+	</div>
+	<div class='info'>
+		Equation Parser, define size of charts. Could do styling and embed link as well.
+	</div>
+
+	<script src='calculatorlogic.js'></script>
+</body>
+</html>
