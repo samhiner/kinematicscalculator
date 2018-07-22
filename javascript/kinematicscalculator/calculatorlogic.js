@@ -1,6 +1,6 @@
 class graph extends Chart {
 	//make a line or bar chart using a given canvas
-	constructor(id,sizeData) {
+	constructor(id,sizeData,seconds) {
 		var canvas = document.getElementById(id).getContext('2d');
 		if (id == 'acceleration') {
 			var firstPoint = null;
@@ -30,7 +30,7 @@ class graph extends Chart {
 					xAxes: [{
 						ticks: {
 							autoSkip: true,
-							maxTicksLimit: 5
+							maxTicksLimit: seconds - 1 //ISSUE: pass seconds and figure out why it didn't work when you tried it before
 						}
 					}]
 				}
@@ -51,7 +51,7 @@ class graph extends Chart {
 }
 
 
-function alignGraphs(origin) {
+function alignGraphs(origin, seconds) {
 
 	x = position.getData()
 	v = velocity.getData()
@@ -62,17 +62,17 @@ function alignGraphs(origin) {
 
 	//ISSUE make it so the proper times/div is triggered without explicit ifs so I can add this to the main class bc thatd be cool
 	if (origin == 'position') {
-		for (var t = 1; t < 6; t++) {
+		for (var t = 1; t < numPoints; t += 1/resolution) {
 			v[t] = divT(x, v, t);
 			a[t] = divT(v, a, t);
 		}
 	} else if (origin == 'velocity') {
-		for (var t = 1; t < 6; t++) {
+		for (var t = 1; t < numPoints; t += 1/resolution) {
 			x[t] = timesT(v, x, t);
 			a[t] = divT(v, a, t);
 		}
 	} else if (origin == 'acceleration') {
-		for (var t = 1; t < 6; t++) {
+		for (var t = 1; t < numPoints; t += 1/resolution) {
 			v[t] = timesT(a, v, t);
 			x[t] = timesT(v, x, t);
 		}
@@ -97,20 +97,39 @@ v[t] = (x[t] - x[t-1]) * 2
 
 */
 
-function makeGraphData(size) {
+//make labels and random placeholder data based on number of seconds and how many points there should be per second (resolution)
+function makeGraphData(seconds, resolution) {
 	labels = [0];
 	vals = [0]
-	for (var x = 1; x < size; x++) {
-		labels[x] = labels[x - 1] + 1;
-		vals[x] = Math.random() * 100;
+	//subtract res - 1 bc otherwise if the max is 5 and res is 4 the max will be 5.75 as it made 3 extra decimals for the max.
+	for (var x = 1; x < (seconds * resolution) - (resolution - 1); x++) {
+		newLabel = labels[x - 1] + 1/resolution;
+		//if the number on the x axis is very close to a whole number, round it to that number. prevents 1 being 0.9999 when resolution is 3.
+		if ((String(newLabel).indexOf('.') == -1) || (String(newLabel).split('.')[1].indexOf('9999') != -1) || (String(newLabel).split('.')[1].indexOf('0000') != -1)) {
+			newLabel = Math.round(newLabel)
+		}
+		labels[x] = newLabel
+		vals[x] = Math.random() * 100 - 50;
 	}
 	return [labels, vals];
 }
 
-aSize = 6;
+function resetGraph() {
+	return;
+}
 
-var position = new graph('position',makeGraphData(aSize));
-var velocity = new graph('velocity',makeGraphData(aSize));
-var acceleration = new graph('acceleration',makeGraphData(aSize));
+//MAJOR ISSUE: this should run in resetGrapoh but that should be in a class so p, v, and a are accesable by other functions
+//IDEA: once in resetGraph maybe find a way to not randomize data after the first time so you can get higher res without starting over
+//ISSUE: some number/resolution combination do not go 1-2-3-4 but do random numbers on x-axis.
+var totalSeconds = Number(document.getElementById('seconds').value) + 1;
+var resolution = Number(document.getElementById('resolution').value);
+console.log(totalSeconds + ' ' + resolution)
+var numPoints = totalSeconds * resolution - (resolution - 1);
 
-alignGraphs('acceleration')
+var position = new graph('position',makeGraphData(totalSeconds, resolution),totalSeconds);
+var velocity = new graph('velocity',makeGraphData(totalSeconds, resolution),totalSeconds);
+var acceleration = new graph('acceleration',makeGraphData(totalSeconds, resolution),totalSeconds);
+
+alignGraphs('acceleration', seconds)
+
+//ISSUE: maybe put this in a class idk

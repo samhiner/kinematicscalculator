@@ -22,8 +22,10 @@
 		</div>
 	</div>
 	<div class='info'>
-		Equation Parser, define size of charts (make sure dragging only goes to the edge of this bc the plugin makes dragging beyond that look bad). Embed link. See ball moving according to the graph. Get raw array of values. Add points by clicking at a spot. Make acceleration a line graph. At low res it would stay flat but at high res it could be non-constant per second. Negative t.
-		<br><br>x = 2v = 4a. alter resolution should be mesaured in units of a. have advanced function of changing x/v/a numPoints constant
+		Equation Parser, let users define size of charts (make sure dragging only goes to the edge of this bc the plugin makes dragging beyond that look bad). Embed link. See ball moving according to the graph. Get raw array of values. Add points by clicking at a spot. Negative t.
+		<br><br>
+		Seconds: <input type='text' id='seconds' value='5' onkeyup='resetGraph()'><br>
+		Resolution (Points per Second): <input type='text' id='resolution' value='4' onkeyup='resetGraph()'>
 	</div>
 
 	<script src='calculatorlogic.js'></script>
