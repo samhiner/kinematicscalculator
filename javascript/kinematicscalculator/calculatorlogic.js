@@ -35,7 +35,7 @@ class graph extends Chart {
 					xAxes: [{
 						ticks: {
 							autoSkip: true,
-							maxTicksLimit: seconds - 1 //ISSUE: pass seconds and figure out why it didn't work when you tried it before
+							maxTicksLimit: seconds - 1
 						}
 					}]
 				}
@@ -65,6 +65,7 @@ class sess {
 	constructor() {
 		const totalSeconds = this.getGraphSize();
 
+		//TODO: make these correct, will prob have to do an ROC thing
 		this.timesT = (oldLevel, newLevel, t) => newLevel[t-1] + (oldLevel[t] + oldLevel[t-1])/2;
 		this.divT = (oldLevel, newLevel, t) => (oldLevel[t] - oldLevel[t-1]) * 2;
 
@@ -81,7 +82,7 @@ class sess {
 
 		this.resolution = Number(document.getElementById('resolution').value);
 		//substract (resolution - 1) does not include any points after the max number 
-		//ex: if there are five points and 4 resolution, 3 points are not generated after 5.0
+		//ex: if there are 5 points and 4 resolution, 3 points are *not* generated after 5.0
 		this.numPoints = totalSeconds * this.resolution - (this.resolution - 1);
 
 		console.log(totalSeconds + ' ' + this.resolution);
@@ -112,6 +113,10 @@ class sess {
 	//change the graphs so their data is based on the data of the origin graph
 	alignGraphs(origin) {
 
+		if (this.numPoints == 0) {
+			return;
+		}
+
 		let x = this.position.getData();
 		let v = this.velocity.getData();
 		let a = this.acceleration.getData();
@@ -141,7 +146,6 @@ class sess {
 	}
 
 	//change the number of points on the screen while preserving as much of the data from before the resizing as possible
-	//TODO: make sure input is not zero
 	graphPointsChange() {
 		const totalSeconds = this.getGraphSize();
 		const oldVals = this.acceleration.getData();
@@ -153,6 +157,13 @@ class sess {
 		this.velocity.changeLabels(newData[0])
 
 		this.acceleration.changeData(newData[1]);
+
+		//if input is <= 0 only show one point on each graph
+		if (newData[0] == 0) {
+			this.velocity.changeData(newData[1]);
+			this.position.changeData(newData[1]);
+			return;
+		}
 
 		this.alignGraphs('acceleration');
 	}

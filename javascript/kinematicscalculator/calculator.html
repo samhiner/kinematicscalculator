@@ -22,13 +22,15 @@
 		</div>
 	</div>
 	<div class='info'>
-		Equation Parser, let users define size of charts (make sure dragging only goes to the edge of this bc the plugin makes dragging beyond that look bad). Embed link. See ball moving according to the graph. Get raw array of values. Add points by clicking at a spot. Negative t. Available presets for simple kinematics like having one for const acceleration. Make weird resolutions not look terrible. 
-
-		<br>Woah turns out doing 0 input fails v elegantly (and decimals just worked wow!) but could still help to have validation to make it look better.
+		Equation Parser, let users define size of charts (make sure dragging only goes to the edge of this bc the plugin makes dragging beyond that look bad). Embed link. See ball moving according to the graph. Get raw array of values. Add points by clicking at a spot. Negative t. Available presets for simple kinematics like having one for const acceleration. Make weird resolutions not look terrible. Add slope 0 acceleration option.
+		<br>Find out why when I change position and click inside the seconds box the graphs change. it prob is because it does aligngraphs after porting over the new data. deeper into aligngraphs problems on next line
+		<br>also when i force alignGraphs this could mean the lambdas are wrong. maybe someting to do with how it grabs [x-1]?
 		<br><br>
 		Seconds: <input type='number' id='seconds' value='5' onkeyup='userSess.graphPointsChange()' onclick='userSess.graphPointsChange()'><br>
 		Resolution (Points per Second): <input type='number' id='resolution' value='4' onkeyup='userSess.graphPointsChange()' onclick='userSess.graphPointsChange()'>
 	</div>
+
+	<button onclick="userSess.alignGraphs('acceleration')">||||||||||||||||</button>
 
 	<script src='calculatorlogic.js'></script>
 </body>
