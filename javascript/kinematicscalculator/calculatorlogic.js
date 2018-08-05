@@ -53,6 +53,11 @@ class graph extends Chart {
 		this.update();
 	}
 
+	changeLabels(array) {
+		this.config.data.labels = array;
+		this.update;
+	}
+
 }
 
 class sess {
@@ -85,18 +90,20 @@ class sess {
 	}
 
 	//make labels and random placeholder data based on number of seconds and how many points there should be per second (resolution)
-	initGraph() {
+	//TODO: do rounding so that 999s are rounded but only two the last place before the 999s to prevent random rounding
+	initGraph(pastNums = null) {
 		let labels = [0];
 		let vals = [0]
 		//subtract (res - 1) bc otherwise if the max is 5 and res is 4 the max will be 5.75 as it made 3 extra decimals for the max.
 		for (var x = 1; x < this.numPoints; x++) {
-			let newLabel = labels[x - 1] + 1/this.resolution;
-			//if the number on the x axis is very close to a whole number, round it to that number. prevents 1 being 0.9999 when resolution is 3.
-			if ((String(newLabel).indexOf('.') == -1) || (String(newLabel).split('.')[1].indexOf('9999') != -1) || (String(newLabel).split('.')[1].indexOf('0000') != -1)) {
-				newLabel = Math.round(newLabel);
+			if (pastNums && pastNums[x]) {
+				vals[x] = pastNums[x]
+			} else {
+				vals[x] = Math.random() * 100 - 50;
 			}
+			let newLabel = labels[x - 1] + 1/this.resolution;
 			labels[x] = newLabel;
-			vals[x] = Math.random() * 100 - 50;
+			
 		}
 
 		return [labels, vals];
@@ -134,14 +141,20 @@ class sess {
 	}
 
 	//change the number of points on the screen while preserving as much of the data from before the resizing as possible
-	//TODO: this
+	//TODO: make sure input is not zero
 	graphPointsChange() {
-		getGraphSize()
+		const totalSeconds = this.getGraphSize();
+		const oldVals = this.acceleration.getData();
 
-		let vals = this.acceleration.getData();
+		const newData = this.initGraph(oldVals);
 
-		return;
-		//IDEA: maybe change the x.y.z.labels property of old canvases instead of making new ones at the end
+		this.acceleration.changeLabels(newData[0]);
+		this.position.changeLabels(newData[0])
+		this.velocity.changeLabels(newData[0])
+
+		this.acceleration.changeData(newData[1]);
+
+		this.alignGraphs('acceleration');
 	}
 
 }
