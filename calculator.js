@@ -67,7 +67,7 @@ class sess {
 
 		//TODO: make these correct, will prob have to do an ROC thing
 		this.timesT = (oldLevel, newLevel, t) => newLevel[t-1] + (oldLevel[t] + oldLevel[t-1])/2;
-		this.divT = (oldLevel, newLevel, t) => (oldLevel[t] - oldLevel[t-1]) * 2;
+		this.divT = (oldLevel, newLevel, t) => (oldLevel[t] - oldLevel[t-1]) * 2; //why *2?
 
 		this.position = new graph('position',this.initGraph(),totalSeconds);
 		this.velocity = new graph('velocity',this.initGraph(),totalSeconds);

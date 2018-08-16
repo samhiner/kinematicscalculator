@@ -4,7 +4,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
 	<script src="https://chrispahm.github.io/chartjs-plugin-dragData/assets/chartjs-plugin-dragData.min.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Lily+Script+One|Oxygen" rel="stylesheet">
-	<link rel='stylesheet' type='text/css' href='calculatorstyle.css'>
+	<link rel='stylesheet' type='text/css' href='calculator.css'>
 </head>
 <body>
 	<div class='allGraphs'>
@@ -22,9 +22,27 @@
 		</div>
 	</div>
 	<div class='info'>
-		Equation Parser, let users define size of charts (make sure dragging only goes to the edge of this bc the plugin makes dragging beyond that look bad). Embed link. See ball moving according to the graph. Get raw array of values. Add points by clicking at a spot. Negative t. Available presets for simple kinematics like having one for const acceleration. Make weird resolutions not look terrible. Add slope 0 acceleration option.
-		<br>Find out why when I change position and click inside the seconds box the graphs change. it prob is because it does aligngraphs after porting over the new data. deeper into aligngraphs problems on next line
-		<br>also when i force alignGraphs this could mean the lambdas are wrong. maybe someting to do with how it grabs [x-1]?
+		Equation Parser, let users define size of charts (make sure dragging
+		only goes to the edge of this bc the plugin makes dragging beyond that
+		look bad). Embed link. See ball moving according to the graph. Get raw
+		array of values. Add points by clicking at a spot. Negative t. 
+		Available presets for simple kinematics like having one for const
+		acceleration. Make weird resolutions not look terrible. Add slope 0
+		acceleration option.
+		<br><br>
+		<strong>Guide to future me for when I have time to implement this:
+		</strong> I figured out what is wrong with the lambdas. I am trying to 
+		model the math for how they should work with traditional kinematics 
+		scenarios. The problem is that the fundamental way these graphs work 
+		does not support those scenarios. For example, if you have x slope for 
+		position which suddenly changes the velocity graph should be a 
+		constant then instantly become a different constant. Any changes take 
+		at least the distance between two points to occur. So, the easiest way 
+		to fix this would be having two points at each spot where there should 
+		be one point so it can instantly change. Maybe three points bc in the 
+		acceleration graph it would show the acceleration going up to x for an 
+		instant then immediately back down. Anyways, the structure will have 
+		to be re-done to support this so it will take a little while.
 		<br><br>
 		Seconds: <input type='number' id='seconds' value='5' onkeyup='userSess.graphPointsChange()' onclick='userSess.graphPointsChange()'><br>
 		Resolution (Points per Second): <input type='number' id='resolution' value='4' onkeyup='userSess.graphPointsChange()' onclick='userSess.graphPointsChange()'>
@@ -32,6 +50,6 @@
 
 	<button onclick="userSess.alignGraphs('acceleration')">||||||||||||||||</button>
 
-	<script src='calculatorlogic.js'></script>
+	<script src='calculator.js'></script>
 </body>
 </html>
